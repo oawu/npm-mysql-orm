@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/comdan66/node-ORM.git"
+    "url": "git+https://github.com/comdan66/node-MySQL-ORM.git"
   },
   "keywords": [
     "MySQL",
@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/comdan66/node-ORM/issues"
+    "url": "https://github.com/comdan66/node-MySQL-ORM/issues"
   },
   "dependencies": {
     "@oawu/cli-progress": "^1.0.14",
@@ -31,5 +31,5 @@
     "@oawu/xterm": "^1.0.6",
     "mysql": "^2.18.1"
   },
-  "homepage": "https://github.com/comdan66/node-ORM#readme"
+  "homepage": "https://github.com/comdan66/node-MySQL-ORM#readme"
 }
