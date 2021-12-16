@@ -293,3 +293,14 @@ module.exports = Queue()
       })
       .catch(error => { throw error })
   })
+  .enqueue(next => {
+    Device.where('number', 'is', null).one()
+      .then(user => {
+        user.name = 'aaa'
+        user.save((error, user) => {
+          if (error) throw error
+          next(process.stdout.write('  ➜ ok\n'))
+        })
+      })
+      .catch(error => { throw error })
+  })
