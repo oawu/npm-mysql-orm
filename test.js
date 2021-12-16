@@ -31,5 +31,6 @@ Config.queryLogDir(__dirname + path.sep + 'logs' + path.sep)
 
 // 測試
 require('./test-Migration.js')
-  .enqueue(next => require('./test-Model.js')
-    .enqueue(next => DB.close()))
+  .enqueue(next => require('./test-Model-1.js')
+    .enqueue(next => require('./test-Model-2.js')
+      .enqueue(next => DB.close())))

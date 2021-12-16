@@ -11,7 +11,7 @@ const { Model: { User } } = require('./index.js')
 
 module.exports = Queue()
 
-  .enqueue(next => next(process.stdout.write('測試 Model\n')))
+  .enqueue(next => next(process.stdout.write('測試 Model - 1\n')))
   
   // truncate
   .enqueue(next => {
