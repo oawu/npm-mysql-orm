@@ -1,6 +1,6 @@
 {
   "name": "@oawu/mysql-orm",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "📚 來吧，Node.js 的 ORM，這次還包含了 Migration 喔！",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/comdan66/node-MySQL-ORM.git"
+    "url": "git+https://github.com/oawu/npm-mysql-orm.git"
   },
   "keywords": [
     "MySQL",
@@ -18,18 +18,18 @@
   ],
   "author": {
     "name": "OA Wu",
-    "email": "comdan66@gmail.com",
+    "email": "oawu.tw@gmail.com",
     "url": "https://www.ioa.tw"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/comdan66/node-MySQL-ORM/issues"
+    "url": "https://github.com/oawu/npm-mysql-orm/issues"
   },
   "dependencies": {
-    "@oawu/cli-progress": "^1.0.14",
-    "@oawu/queue": "^1.0.10",
-    "@oawu/xterm": "^1.0.6",
+    "@oawu/cli-progress": "^1.0.15",
+    "@oawu/queue": "^1.0.11",
+    "@oawu/xterm": "^1.0.7",
     "mysql": "^2.18.1"
   },
-  "homepage": "https://github.com/comdan66/node-MySQL-ORM#readme"
+  "homepage": "https://github.com/oawu/npm-mysql-orm#readme"
 }
