@@ -61,13 +61,20 @@ module.exports = Queue()
       .then(user => next(process.stdout.write('  ➜ ok ➜ ' + user.id + '\n')))
       .catch(error => { throw error })
   })
-  
+  .enqueue(next => {
+    process.stdout.write('  create "\n')
+    Device.create({ name: `oa${'\\'}${'"'}oc`, sex: 'male', height: 171.1, bio: '' }, (error, user) => {
+      if (error) throw error
+      next(process.stdout.write('  ➜ ok ➜ ' + user.id + '\n'))
+    })
+  })
+
   // count
   .enqueue(next => {
     process.stdout.write('  count\n')
     Device.count((error, total) => {
       if (error) throw error
-      if (total != 3) throw new Error('  ➜ error\n')
+      if (total != 4) throw new Error('  ➜ error\n')
       next(process.stdout.write('  ➜ ok\n'))
     })
   })
@@ -75,7 +82,7 @@ module.exports = Queue()
     process.stdout.write('  count promise\n')
     Device.count()
       .then(total => {
-        if (total != 3) throw new Error('  ➜ error\n')
+        if (total != 4) throw new Error('  ➜ error\n')
         next(process.stdout.write('  ➜ ok\n'))
       })
       .catch(error => { throw error })
@@ -84,7 +91,7 @@ module.exports = Queue()
     process.stdout.write('  count async\n')
     const test = async _ => {
       const total = await Device.count()
-      if (total != 3) throw new Error('  ➜ error\n')
+      if (total != 4) throw new Error('  ➜ error\n')
       return total
     }
     test()
@@ -154,6 +161,7 @@ module.exports = Queue()
       .catch(error => { throw error })
   })
 
+
   // update
   .enqueue(next => {
     process.stdout.write('  update ob\n')
@@ -194,6 +202,15 @@ module.exports = Queue()
 
   // select
   .enqueue(next => {
+    process.stdout.write('  where(4) all\n')
+    Device.where(4).one((error, user) => {
+      if (error) throw error
+      if (!user) throw new Error('  ➜ error\n')
+      if (user.name != `oa${'\\'}"oc`) throw new Error('  ➜ error\n')
+      next(process.stdout.write('  ➜ ok\n'))
+    })
+  })
+  .enqueue(next => {
     process.stdout.write('  where(id>1 && id<3) all\n')
     Device.where('id', '>', 1).where('id', '<', 3).all((error, users) => {
       if (error) throw error
@@ -227,7 +244,7 @@ module.exports = Queue()
 
     Device.all((error, users) => {
       if (error) throw error
-      if (users.length != 3) throw new Error('  ➜ error\n')
+      if (users.length != 4) throw new Error('  ➜ error\n')
       next(process.stdout.write('  ➜ ok\n'))
     })
   })
@@ -248,8 +265,8 @@ module.exports = Queue()
     Device.order('id DESC').limit(2).all((error, users) => {
       if (error) throw error
       if (users.length != 2) throw new Error('  ➜ error\n')
-      if (users[0].id != 3) throw new Error('  ➜ error\n')
-      if (users[1].id != 2) throw new Error('  ➜ error\n')
+      if (users[0].id != 4) throw new Error('  ➜ error\n')
+      if (users[1].id != 3) throw new Error('  ➜ error\n')
       next(process.stdout.write('  ➜ ok\n'))
     })
   })
@@ -259,8 +276,8 @@ module.exports = Queue()
     Device.order('id DESC').offset(1).limit(2).all((error, users) => {
       if (error) throw error
       if (users.length != 2) throw new Error('  ➜ error\n')
-      if (users[0].id != 2) throw new Error('  ➜ error\n')
-      if (users[1].id != 1) throw new Error('  ➜ error\n')
+      if (users[0].id != 3) throw new Error('  ➜ error\n')
+      if (users[1].id != 2) throw new Error('  ➜ error\n')
       next(process.stdout.write('  ➜ ok\n'))
     })
   })

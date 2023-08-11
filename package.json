@@ -1,6 +1,6 @@
 {
   "name": "@oawu/mysql-orm",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "📚 來吧，Node.js 的 ORM，這次還包含了 Migration 喔！",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,10 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/oawu/npm-mysql-orm/issues"
+  },
+  "engines": {
+    "node": ">=15",
+    "npm": ">=9"
   },
   "dependencies": {
     "@oawu/cli-progress": "^1.0.15",
