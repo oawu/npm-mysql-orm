@@ -17,7 +17,8 @@ Config.connect({
     database: "php-orm",
     port: 3306,
     waitForConnections : true,
-    connectionLimit : 3
+    connectionLimit : 3,
+    charset: 'utf8mb4'
   })
 
 // Migration 檔案位置
