@@ -1,6 +1,6 @@
 {
   "name": "@oawu/mysql-orm",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "description": "📚 來吧，Node.js 的 ORM，這次還包含了 Migration 喔！",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@oawu/cli-progress": "^1.0.15",
-    "@oawu/queue": "^1.0.11",
+    "@oawu/helper": "^2.0.2",
     "@oawu/xterm": "^1.0.7",
     "mysql": "^2.18.1"
   },

@@ -1,182 +1,238 @@
 /**
  * @author      OA Wu <oawu.tw@gmail.com>
- * @copyright   Copyright (c) 2015 - 2022, @oawu/orm
+ * @copyright   Copyright (c) 2015 - 2025, @oawu/orm
  * @license     http://opensource.org/licenses/MIT  MIT License
  * @link        https://www.ioa.tw/
  */
 
-const Queue = require('@oawu/queue')
-
 const { Migrate } = require('./index.js')
+const { Type: T } = require('@oawu/helper')
 
-module.exports = Queue()
-  
-  .enqueue(next => next(process.stdout.write('測試 Migrate\n')))
+const executeBase = async _ => {
+  process.stdout.write(`  測試 execute(closure)\n`)
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(closure)\n')
-    Migrate.version((error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    })
-  })
+  process.stdout.write(`  測試 execute() promise\n`)
+  await new Promise((resolve, reject) => Migrate.execute().then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0, closure)\n')
-    Migrate.version(0, (error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    })
-  })
+  process.stdout.write(`  測試 execute() async\n`)
+  await Migrate.execute()
+  process.stdout.write(`  ➜ ok\n`)
+}
+const executeNum = async val => {
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, closure)\n`)
+  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(closure, false)\n')
-    Migrate.version((error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    }, false)
-  })
+  process.stdout.write(`  測試 execute(closure, ${val === null ? 'null' : val})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0, closure, false)\n')
-    Migrate.version(0, (error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    }, false)
-  })
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}) promise\n`)
+  await new Promise((resolve, reject) => Migrate.execute(val).then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version() promise\n')
-    Migrate.version()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}) async\n`)
+  await Migrate.execute(val)
+  process.stdout.write(`  ➜ ok\n`)
+}
+const executeShow = async show => {
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, closure)\n`)
+  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version() async\n')
-    const test = async _ => {
-      const migrate = await Migrate.version()
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(closure, ${show ? 'true' : 'false'})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0) promise\n')
-    Migrate.version(0)
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}) promise\n`)
+  await new Promise((resolve, reject) => Migrate.execute(show).then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0) async\n')
-    const test = async _ => {
-      const migrate = await Migrate.version(0)
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}) async\n`)
+  await Migrate.execute(show)
+  process.stdout.write(`  ➜ ok\n`)
+}
+const executeNumShow = async (val, show) => {
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, ${show ? 'true' : 'false'}, closure)\n`)
+  await new Promise((resolve, reject) => Migrate.execute(val, show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(false) promise\n')
-    Migrate.version(false)
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, closure, ${show ? 'true' : 'false'})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(false) async\n')
-    const test = async _ => {
-      const migrate = await Migrate.version(false)
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, ${val === null ? 'null' : val}, closure)\n`)
+  await new Promise((resolve, reject) => Migrate.execute(show, val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0, false) promise\n')
-    Migrate.version(0, false)
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, closure, ${val === null ? 'null' : val})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 version(0, false) async\n')
-    const test = async _ => {
-      const migrate = await Migrate.version(0, false)
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(closure, ${show ? 'true' : 'false'}, ${val === null ? 'null' : val})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show, val))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh(closure)\n')
-    Migrate.refresh((error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    })
-  })
+  process.stdout.write(`  測試 execute(closure, ${val === null ? 'null' : val}, ${show ? 'true' : 'false'})\n`)
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val, show))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh(closure, false)\n')
-    Migrate.refresh((error, migrate) => {
-      if (error)
-        throw error
-      else
-        next(process.stdout.write('  ➜ ok\n'))
-    }, false)
-  })
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, ${show ? 'true' : 'false'}) promise\n`)
+  await new Promise((resolve, reject) => Migrate.execute(val, show).then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh() promise\n')
-    Migrate.refresh()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, ${val === null ? 'null' : val}) promise\n`)
+  await new Promise((resolve, reject) => Migrate.execute(show, val).then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh() async\n')
-    const test = async _ => {
-      const migrate = await Migrate.refresh()
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, ${show ? 'true' : 'false'}) async\n`)
+  await Migrate.execute(val, show)
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh(false) promise\n')
-    Migrate.refresh(false)
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, ${val === null ? 'null' : val}) async\n`)
+  await Migrate.execute(show, val)
+  process.stdout.write(`  ➜ ok\n`)
+}
+const refreshBase = async () => {
+  process.stdout.write(`  測試 refresh(closure)\n`)
+  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
 
-  .enqueue(next => {
-    process.stdout.write('  測試 refresh(false) async\n')
-    const test = async _ => {
-      const migrate = await Migrate.refresh(false)
-      return migrate
-    }
-    test()
-      .then(migrate => next(process.stdout.write('  ➜ ok\n')))
-      .catch(error => { throw error })
-  })
+  process.stdout.write(`  測試 refresh() promise\n`)
+  await new Promise((resolve, reject) => Migrate.refresh().then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試 refresh() async\n`)
+  await Migrate.refresh()
+  process.stdout.write(`  ➜ ok\n`)
+}
+
+const refreshShow = async (show) => {
+  process.stdout.write(`  測試 refresh(${show ? 'true' : 'false'}, closure)\n`)
+  await new Promise((resolve, reject) => Migrate.refresh(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試 refresh(closure, ${show ? 'true' : 'false'})\n`)
+  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試 refresh(${show ? 'true' : 'false'}) promise\n`)
+  await new Promise((resolve, reject) => Migrate.refresh(show).then(resolve).catch(reject))
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試 refresh(${show ? 'true' : 'false'}) async\n`)
+  await Migrate.refresh(show)
+  process.stdout.write(`  ➜ ok\n`)
+}
+
+module.exports = async _ => {
+  process.stdout.write('測試 Migrate\n')
+
+  // execute 基礎測試
+  await executeBase()
+  // execute 指定版本 0
+  await executeNum(0)
+  // execute 指定版本 null
+  await executeNum(null)
+  // 隱藏
+  await executeShow(false)
+  // 顯示
+  await executeShow(true)
+  // 混用
+  await executeNumShow(0, false)
+  await executeNumShow(0, true)
+  await executeNumShow(null, false)
+  await executeNumShow(null, true)
+// =======
+  await refreshBase()
+  await refreshShow(true)
+  await refreshShow(false)
+// =======
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 null\n`)
+  await Migrate.execute(null)
+  if (await Migrate.version() !== 8) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 null\n`)
+  await Migrate.execute(null)
+  if (await Migrate.version() !== 8) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0, true)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 null\n`)
+  await Migrate.execute(null, true)
+  if (await Migrate.version() !== 8) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0, true)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 null\n`)
+  await Migrate.execute(null, true)
+  if (await Migrate.version() !== 8) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+// =======
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 3\n`)
+  await Migrate.execute(3)
+  if (await Migrate.version() !== 3) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 3\n`)
+  await Migrate.execute(3)
+  if (await Migrate.version() !== 3) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0, true)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 3\n`)
+  await Migrate.execute(3, true)
+  if (await Migrate.version() !== 3) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 0\n`)
+  await Migrate.execute(0, true)
+  if (await Migrate.version() !== 0) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  process.stdout.write(`  測試版本 3\n`)
+  await Migrate.execute(3, true)
+  if (await Migrate.version() !== 3) { throw new Error('版本錯誤') }
+  process.stdout.write(`  ➜ ok\n`)
+
+  await Migrate.execute()
+}

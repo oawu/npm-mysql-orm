@@ -2,7 +2,6 @@
 
 來吧，Node.js 的 ORM，這次還包含了 Migration 喔！ 📚
 
-
 ## 說明
 製作個人的 [Node.js](https://nodejs.org/en/) [MySQL](https://www.mysql.com/) [ORM](https://zh.wikipedia.org/zh-tw/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84) 功能，功能包含 Migration 與 ORM Model，ORM 提供了 create、update、delete、search... 等功能。
 
@@ -28,22 +27,23 @@ npm install @oawu/mysql-orm
   const { Config } = require('@oawu/mysql-orm')
 
   // 設定連線方式
-  Config.connect({
+
+  Config.connect = {
     host: "127.0.0.1",
     user: "root",
     password: "1234",
     database: "php-orm",
     port: 3306
-  })
+  }
 
   // Migration 檔案位置
-  Config.migrationsDir(__dirname + '/migrations/')
+  Config.migrationsDir = __dirname + '/migrations/'
 
   // Model 檔案位置
-  Config.modelsDir(__dirname + '/models/')
+  Config.modelsDir = __dirname + '/models/'
 
   // Log 檔案位置
-  Config.queryLogDir(__dirname + '/logs/')
+  Config.queryLogDir = __dirname + '/logs/'
 
 ```
 
@@ -57,12 +57,12 @@ npm install @oawu/mysql-orm
     up (db) {
       db = db.create('User', '使用者')
       db.attr('id').int().unsigned().notNull().autoIncrement().comment('ID')
-      
+
       db.attr('name').varchar(190).collate('utf8mb4_unicode_ci').notNull().comment('名稱')
       db.attr('sex').enum('male', 'female').collate('utf8mb4_unicode_ci').default(null).comment('性別')
       db.attr('height').decimal(5, 2).unsigned().default(null).comment('身高')
       db.attr('bio').text().collate('utf8mb4_unicode_ci').notNull().comment('個人簡歷')
-      
+
       db.attr('updateAt').datetime().notNull().default('CURRENT_TIMESTAMP').on('update', 'CURRENT_TIMESTAMP').comment('更新時間')
       db.attr('createAt').datetime().notNull().default('CURRENT_TIMESTAMP').comment('新增時間')
 
@@ -91,13 +91,13 @@ npm install @oawu/mysql-orm
   const { Migrate } = require('@oawu/mysql-orm')
 
   // 更新至最新，使用 callback 方式執行
-  Migrate.version((error, migrate) => {
-    if (error)
-      console.error(error)
+  Migrate.version(data => {
+    if (data instanceof Error)
+      console.error(data) // error
     else
-      console.error(migrate)
+      console.error(data) // migrate
   })
-  
+
   // 更新至第 0 版，使用 Promise 方式執行
   Migrate.version(0)
     .then(migrate => {
@@ -132,11 +132,11 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
   const { Model } = require('@oawu/mysql-orm')
 
   // callback
-  Model.User.create({ name: 'OA', sex: 'male', height: 171.1, bio: 'test' }, (error, user) => {
-    if (error)
-      console.error(error)
+  Model.User.create({ name: 'OA', sex: 'male', height: 171.1, bio: 'test' }, data => {
+    if (data instanceof Error)
+      console.error(data) // error
     else
-      console.error(user)
+      console.error(data) // user
   })
 
   // Promise
@@ -158,9 +158,9 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
 
   // 多筆查詢
   // callback
-  Model.User.all((error, users) => {
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.all(data => {
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
 
   // Promise
@@ -169,45 +169,45 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
     .catch(error => console.error(error))
 
   // 單筆查詢
-  Model.User.one((error, user) => {
-    if (error) console.error(error)
-    else console.error(user)
+  Model.User.one(data => {
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // user
   })
 
   // 條件式查詢
-  Model.User.where(1).all((error, users) => { // id == 1
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where(1).all(data => { // id == 1
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
-  Model.User.where('id', '>', 1).all((error, users) => { // id > 1
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where('id', '>', 1).all(data => { // id > 1
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
-  Model.User.where('name', 'LIKE', '%OA%').all((error, users) => { // name like %OA%
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where('name', 'LIKE', '%OA%').all(data => { // name like %OA%
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
-  Model.User.where({ id: [1, 2, 3] }).all((error, users) => { // id in [1, 2, 3]
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where({ id: [1, 2, 3] }).all(data => { // id in [1, 2, 3]
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
-  Model.User.where('name', 'LIKE', '%OA%').where([1, 2, 3]).all((error, users) => { // name like %OA% AND id in [1, 2, 3]
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where('name', 'LIKE', '%OA%').where([1, 2, 3]).all(data => { // name like %OA% AND id in [1, 2, 3]
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
-  Model.User.where('name', 'LIKE', '%OA%').orWhere({ id: [1, 2, 3] }).all((error, users) => { // name like %OA% OR id in [1, 2, 3]
-    if (error) console.error(error)
-    else console.error(users)
+  Model.User.where('name', 'LIKE', '%OA%').orWhere({ id: [1, 2, 3] }).all(data => { // name like %OA% OR id in [1, 2, 3]
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
 
   // 其他查詢
-  Model.User.offset(1).limit(3).order('id DESC').select('name').all((error, users) => {
-    if (error) console.error(error)
+  Model.User.offset(1).limit(3).order('id DESC').select('name').all(data => {
+    if (data instanceof Error) console.error(data) // error
     else console.error(users)
   })
   Model.User.select({ name: 'na' }).all((error, users) => {
-    if (error) console.error(error)
-    else console.error(users)
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // users
   })
 
 ```
@@ -221,8 +221,8 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
   // 多筆、條件式更新
   // callback
   Model.User.update({ name: 'oa' }, (error, count) => { // count 為影響的數量
-    if (error) console.error(error)
-    else console.error(count)
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // count
   })
 
   // Promise
@@ -232,13 +232,14 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
 
   // 單筆 save 更新，一樣分成 callback、Promise
   Model.User.one((error, user) => {
-    if (error) console.error(error)
+    if (data instanceof Error) console.error(data) // error
+    const user = data
     user.name = 'oa'
 
     // callback
     user.save((error, user) => {
-      if (error) console.error(error)
-      else console.error(user)
+      if (data instanceof Error) console.error(data) // error
+      else console.error(data) // user
     })
     // Promise
     user.save()
@@ -257,8 +258,8 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
   // 多筆、條件式刪除
   // callback
   Model.User.delete((error, count) => { // count 為影響的數量
-    if (error) console.error(error)
-    else console.error(count)
+    if (data instanceof Error) console.error(data) // error
+    else console.error(data) // count
   })
 
   // Promise
@@ -268,13 +269,14 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
 
   // 單筆 save 更新，一樣分成 callback、Promise
   Model.User.one((error, user) => {
-    if (error) console.error(error)
+    if (data instanceof Error) console.error(data) // error
+    const user = data
     user.name = 'oa'
 
     // callback
     user.delete((error, user) => {
-      if (error) console.error(error)
-      else console.error(user)
+      if (data instanceof Error) console.error(data) // error
+      else console.error(data) // user
     })
     // Promise
     user.delete()

@@ -6,8 +6,10 @@
  */
 
 module.exports = {
-  up: db => db.inserts('devices', [
-    { name: '裝置 1' },
-  ]),
-  down: db => db.truncate('devices')
+  up (db) {
+    return 'ALTER TABLE `IndexCase` DROP INDEX `name_number_unique`;'
+  },
+  down: db => [
+    'ALTER TABLE `IndexCase` ADD UNIQUE `name_number_unique` (`name`, `number`);'
+  ]
 }

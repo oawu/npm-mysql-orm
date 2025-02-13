@@ -1,83 +1,93 @@
 /**
  * @author      OA Wu <oawu.tw@gmail.com>
- * @copyright   Copyright (c) 2015 - 2022, @oawu/orm
+ * @copyright   Copyright (c) 2015 - 2025, @oawu/orm
  * @license     http://opensource.org/licenses/MIT  MIT License
  * @link        https://www.ioa.tw/
  */
 
-const Extend = model => {
-  const Model = require('./lib/Model.js')
-  const Builder = require('./lib/Builder.js')
+const { closureOrPromise } = require('@oawu/helper')
 
-  for (let key in Model.prototype)
-    model.prototype[key] = Model.prototype[key]
+const Builder = require('./lib/Builder.js')
+const Table   = require('./lib/Table.js')
+const _Model   = require('./lib/Model.js')
+
+const _extend = model => {
+  for (let key in _Model.prototype) {
+    model.prototype[key] = _Model.prototype[key]
+  }
 
   Object.defineProperty(model.prototype, 'dump', { get () {
     const tmp = {}
-    for (let key of this.$.attrs.keys())
+    for (let key of this.$.attrs.keys()) {
       tmp[key] = this.$.attrs.get(key)
+    }
     return tmp
   } })
 
-  model.one   = (closure = null) => Builder(model).find(closure, true)
-  model.all   = (closure = null) => Builder(model).find(closure, false)
-  model.count = (closure = null) => Builder(model).count(closure)
-  model.truncate = (closure = null) => Builder(model).truncate(closure)
+  model.one      = (...params) => Builder(model).findOne(...params)
+  model.all      = (...params) => Builder(model).findAll(...params)
+  model.count    = (...params) => Builder(model).count(...params)
+  model.truncate = (...params) => Builder(model).truncate(...params)
+  model.update   = (...params) => Builder(model).update(...params)
+  model.delete   = (...params) => Builder(model).delete(...params)
+  model.limit    = (...params) => Builder(model).limit(...params)
+  model.offset   = (...params) => Builder(model).offset(...params)
+  model.group    = (...params) => Builder(model).group(...params)
+  model.having   = (...params) => Builder(model).having(...params)
+  model.where    = (...params) => Builder(model).where(...params)
+  model.order    = (...params) => Builder(model).order(...params)
+  model.select   = (...params) => Builder(model).select(...params)
+  model.join     = (model, primary, foreign, type = 'INNER') => Builder(model).join(model, primary, foreign)
 
   model.create = (attr = {}, allowKeys = [], closure = null) => {
-    if (typeof attr == 'function')
-      closure = attr, attr = {}, allowKeys = []
+    if (typeof attr == 'function') {
+      closure = attr
+      attr = {}
+      allowKeys = []
+    }
 
-    if (typeof allowKeys == 'function')
-      closure = allowKeys, allowKeys = []
+    if (typeof allowKeys == 'function') {
+      closure = allowKeys
+      allowKeys = []
+    }
 
     const newAttr = {}
-    for(let key in attr)
-      if (!allowKeys.lenght || allowKeys.includes(key))
+    for(let key in attr) {
+      if (!allowKeys.lenght || allowKeys.includes(key)) {
         newAttr[key] = attr[key]
+      }
+    }
 
-    const Table = require('./lib/Table.js')
-
-    return closure
-      ? Table.instance(model, (error, table) => error
-        ? closure(error, null)
-        : Model(table, newAttr, true).save(closure))
-      : new Promise((resolve, reject) => Table.instance(model, (error, table) => error
-        ? reject(error)
-        : Model(table, newAttr, true).save((error, model) => error
-          ? reject(error)
-          : resolve(model))))
+    return closureOrPromise(closure, async _ => {
+      const table = await Table.instance(model)
+      return await _Model(table, newAttr, true).save()
+    })
   }
-
-  model.update = option => Builder(model).update(option)
-  model.limit  = option => Builder(model).limit(option)
-  model.offset = option => Builder(model).offset(option)
-  model.group  = option => Builder(model).group(option)
-  model.having = option => Builder(model).having(option)
-  model.where  = (...options) => Builder(model).where(...options)
-  model.order  = (...options) => Builder(model).order(...options)
-  model.select = (...options) => Builder(model).select(...options)
-  model.join   = (model, primary, foreign, type = 'INNER') => Builder(model).join(model, primary, foreign)
 
   return model
 }
 
-const initeds = new Map()
+const _instances = new Map()
 
 const Model = (model = null) => {
-  if (model === null)
+  if (model === null) {
     return Model
+  }
 
-  if (typeof model == 'string')
+  if (typeof model == 'string') {
     return Model[model]
+  }
 
-  if (initeds.has(model))
-    return Model[model.name] = model = initeds.get(model),
-      model
-  
-  return Model[model.name] = model = Extend(model),
-    initeds.set(model, model),
-    model
+  if (_instances.has(model)) {
+    model = _instances.get(model)
+    Model[model.name] = model
+    return model
+  }
+
+  model = _extend(model)
+  Model[model.name] = model
+  _instances.set(model, model)
+  return model
 }
 
 module.exports = Model
