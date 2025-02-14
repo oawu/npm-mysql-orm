@@ -205,7 +205,7 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
     if (data instanceof Error) console.error(data) // error
     else console.error(users)
   })
-  Model.User.select({ name: 'na' }).all((error, users) => {
+  Model.User.select({ name: 'na' }).all(data => {
     if (data instanceof Error) console.error(data) // error
     else console.error(data) // users
   })
@@ -220,7 +220,7 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
 
   // 多筆、條件式更新
   // callback
-  Model.User.update({ name: 'oa' }, (error, count) => { // count 為影響的數量
+  Model.User.update({ name: 'oa' }, data => { // count 為影響的數量
     if (data instanceof Error) console.error(data) // error
     else console.error(data) // count
   })
@@ -231,13 +231,13 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
     .catch(error => console.error(error))
 
   // 單筆 save 更新，一樣分成 callback、Promise
-  Model.User.one((error, user) => {
+  Model.User.one(data => {
     if (data instanceof Error) console.error(data) // error
     const user = data
     user.name = 'oa'
 
     // callback
-    user.save((error, user) => {
+    user.save(data => {
       if (data instanceof Error) console.error(data) // error
       else console.error(data) // user
     })
@@ -257,7 +257,7 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
 
   // 多筆、條件式刪除
   // callback
-  Model.User.delete((error, count) => { // count 為影響的數量
+  Model.User.delete(data => { // count 為影響的數量
     if (data instanceof Error) console.error(data) // error
     else console.error(data) // count
   })
@@ -268,13 +268,13 @@ Model 都有提供兩種模式，如果 callback 參數未給予，則會以 `Pr
     .catch(error => console.error(error))
 
   // 單筆 save 更新，一樣分成 callback、Promise
-  Model.User.one((error, user) => {
+  Model.User.one(data => {
     if (data instanceof Error) console.error(data) // error
     const user = data
     user.name = 'oa'
 
     // callback
-    user.delete((error, user) => {
+    user.delete(data => {
       if (data instanceof Error) console.error(data) // error
       else console.error(data) // user
     })
