@@ -22,12 +22,12 @@ const _cmd = (desc, action = null) => desc.lightGray.dim + (action !== null ? '�
 
 const _migrate = async _ => {
   const migrates = await tryIgnore(DB.sql('SELECT * FROM `_Migration` limit 0,1;'))
-  return T.error(migrates) ? null : migrates.shift()
+  return T.err(migrates) ? null : migrates.shift()
 }
 const _migrateShowLog = async _ => {
   Progress.title('檢查 Migration Table 是否存在', _cmd('Is Migration table exist?'))
   const tables = await tryIgnore(DB.sql('show tables like "_Migration";'))
-  if (T.error(tables)) {
+  if (T.err(tables)) {
     Progress.fail()
     throw tables
   }
@@ -37,7 +37,7 @@ const _migrateShowLog = async _ => {
 
     Progress.title('建立 Migration Table', _cmd('Create Migration table'))
     const result = await tryIgnore(DB.sql("CREATE TABLE `_Migration` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`version` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT '版本',`updateAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間',`createAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間', PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"))
-    if (T.error(result)) {
+    if (T.err(result)) {
       Progress.fail()
       throw result
     }
@@ -48,7 +48,7 @@ const _migrateShowLog = async _ => {
 
   Progress.title('取得 Migration Table 資料', _cmd('Get Migration Table'))
   const migrates = await tryIgnore(DB.sql('SELECT * FROM `_Migration` limit 0,1;'))
-  if (T.error(migrates)) {
+  if (T.err(migrates)) {
     Progress.fail()
     throw migrates
   }
@@ -62,7 +62,7 @@ const _migrateShowLog = async _ => {
 
   Progress.title('新增 Migration Table 資料', _cmd('Insert Migration table data'))
   const result = await tryIgnore(DB.sql('INSERT INTO `_Migration` (`version`) VALUES (0)'))
-  if (T.error(result)) {
+  if (T.err(result)) {
     Progress.fail()
     throw result
   }
@@ -70,7 +70,7 @@ const _migrateShowLog = async _ => {
 
   Progress.title('取得 Migration Table 資料', _cmd('Get Migration Table'))
   const _migrates = await tryIgnore(DB.sql('SELECT * FROM `_Migration` limit 0,1;'))
-  if (T.error(_migrates)) {
+  if (T.err(_migrates)) {
     Progress.fail()
     throw _migrates
   }
@@ -208,7 +208,7 @@ const execute = (...argvs) => {
           if (T.arr(sqls)) {
             for (const sql of sqls) {
               let result = await tryIgnore(DB.sql(sql))
-              if (T.error(result)) {
+              if (T.err(result)) {
                 Progress.fail()
                 throw result
               }
@@ -219,7 +219,7 @@ const execute = (...argvs) => {
 
           Progress.title(`Migration 版號更新至第 ${pad(todo.version + isDown, 3).lightGray.bold} 版`, _cmd(`Migration version set ${pad(todo.version + isDown, 3)}`))
           result = await tryIgnore(DB.sql('UPDATE `_Migration` SET `_Migration`.`version` = ' + (todo.version + isDown) + ' WHERE `_Migration`.`id` = 1'))
-          if (T.error(result)) {
+          if (T.err(result)) {
             Progress.fail()
             throw result
           }
@@ -314,7 +314,7 @@ const refresh = (...argvs) => {
             if (T.arr(sqls)) {
               for (const sql of sqls) {
                 let result = await tryIgnore(DB.sql(sql))
-                if (T.error(result)) {
+                if (T.err(result)) {
                   Progress.fail()
                   throw result
                 }
@@ -324,7 +324,7 @@ const refresh = (...argvs) => {
 
             Progress.title(`Migration 版號更新至第 ${pad(todo.version + isDown, 3).lightGray.bold} 版`, _cmd(`Migration version set ${pad(todo.version + isDown, 3)}`))
             result = await tryIgnore(DB.sql('UPDATE `_Migration` SET `_Migration`.`version` = ' + (todo.version + isDown) + ' WHERE `_Migration`.`id` = 1'))
-            if (T.error(result)) {
+            if (T.err(result)) {
               Progress.fail()
               throw result
             }

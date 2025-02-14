@@ -10,7 +10,7 @@ const { Type: T } = require('@oawu/helper')
 
 const executeBase = async _ => {
   process.stdout.write(`  測試 execute(closure)\n`)
-  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute() promise\n`)
@@ -23,11 +23,11 @@ const executeBase = async _ => {
 }
 const executeNum = async val => {
   process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, closure)\n`)
-  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(closure, ${val === null ? 'null' : val})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val))
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), val))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${val === null ? 'null' : val}) promise\n`)
@@ -40,11 +40,11 @@ const executeNum = async val => {
 }
 const executeShow = async show => {
   process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, closure)\n`)
-  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(closure, ${show ? 'true' : 'false'})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), show))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}) promise\n`)
@@ -57,27 +57,27 @@ const executeShow = async show => {
 }
 const executeNumShow = async (val, show) => {
   process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, ${show ? 'true' : 'false'}, closure)\n`)
-  await new Promise((resolve, reject) => Migrate.execute(val, show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.execute(val, show, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, closure, ${show ? 'true' : 'false'})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  await new Promise((resolve, reject) => Migrate.execute(val, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), show))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, ${val === null ? 'null' : val}, closure)\n`)
-  await new Promise((resolve, reject) => Migrate.execute(show, val, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.execute(show, val, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${show ? 'true' : 'false'}, closure, ${val === null ? 'null' : val})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val))
+  await new Promise((resolve, reject) => Migrate.execute(show, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), val))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(closure, ${show ? 'true' : 'false'}, ${val === null ? 'null' : val})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show, val))
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), show, val))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(closure, ${val === null ? 'null' : val}, ${show ? 'true' : 'false'})\n`)
-  await new Promise((resolve, reject) => Migrate.execute(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), val, show))
+  await new Promise((resolve, reject) => Migrate.execute(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), val, show))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 execute(${val === null ? 'null' : val}, ${show ? 'true' : 'false'}) promise\n`)
@@ -98,7 +98,7 @@ const executeNumShow = async (val, show) => {
 }
 const refreshBase = async () => {
   process.stdout.write(`  測試 refresh(closure)\n`)
-  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 refresh() promise\n`)
@@ -112,11 +112,11 @@ const refreshBase = async () => {
 
 const refreshShow = async (show) => {
   process.stdout.write(`  測試 refresh(${show ? 'true' : 'false'}, closure)\n`)
-  await new Promise((resolve, reject) => Migrate.refresh(show, migrate => T.error(migrate) ? reject(migrate) : resolve(migrate)))
+  await new Promise((resolve, reject) => Migrate.refresh(show, migrate => T.err(migrate) ? reject(migrate) : resolve(migrate)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 refresh(closure, ${show ? 'true' : 'false'})\n`)
-  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.error(migrate) ? reject(migrate) : resolve(migrate), show))
+  await new Promise((resolve, reject) => Migrate.refresh(migrate => T.err(migrate) ? reject(migrate) : resolve(migrate), show))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  測試 refresh(${show ? 'true' : 'false'}) promise\n`)

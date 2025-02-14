@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const { closureOrPromise } = require('@oawu/helper')
+const { closureOrPromise, Type: T } = require('@oawu/helper')
 
 const Builder = require('./lib/Builder.js')
 const Table   = require('./lib/Table.js')
@@ -40,13 +40,13 @@ const _extend = model => {
   model.join     = (model, primary, foreign, type = 'INNER') => Builder(model).join(model, primary, foreign)
 
   model.create = (attr = {}, allowKeys = [], closure = null) => {
-    if (typeof attr == 'function') {
+    if (T.func(attr) || T.asyncFunc(attr)) {
       closure = attr
       attr = {}
       allowKeys = []
     }
 
-    if (typeof allowKeys == 'function') {
+    if (T.func(allowKeys) || T.asyncFunc(allowKeys)) {
       closure = allowKeys
       allowKeys = []
     }
@@ -74,7 +74,7 @@ const Model = (model = null) => {
     return Model
   }
 
-  if (typeof model == 'string') {
+  if (T.str(model)) {
     return Model[model]
   }
 

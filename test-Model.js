@@ -41,7 +41,7 @@ const cmpUsers = (users, dataList) => {
 }
 const truncate = async Model => {
   process.stdout.write(`  truncate closure\n`)
-  await new Promise((resolve, reject) => Model.truncate(error => T.error(error) ? reject(error) : resolve(error)))
+  await new Promise((resolve, reject) => Model.truncate(error => T.err(error) ? reject(error) : resolve(error)))
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  truncate promise\n`)
@@ -55,7 +55,7 @@ const truncate = async Model => {
 const create = async Model => {
   let user = null
   process.stdout.write(`  create closure\n`)
-  user = await new Promise((resolve, reject) => Model.create(data1, error => T.error(error) ? reject(error) : resolve(error)))
+  user = await new Promise((resolve, reject) => Model.create(data1, error => T.err(error) ? reject(error) : resolve(error)))
   cmpUser(user, data1)
   process.stdout.write(`  ➜ ok\n`)
 
@@ -70,7 +70,7 @@ const create = async Model => {
   process.stdout.write(`  ➜ ok\n`)
 
   process.stdout.write(`  create closure\n`)
-  user = await new Promise((resolve, reject) => Model.create(data4, error => T.error(error) ? reject(error) : resolve(error)))
+  user = await new Promise((resolve, reject) => Model.create(data4, error => T.err(error) ? reject(error) : resolve(error)))
   cmpUser(user, data4)
   process.stdout.write(`  ➜ ok\n`)
 
@@ -89,7 +89,7 @@ const count = async Model => {
 
   let count = null
   process.stdout.write(`  count closure\n`)
-  count = await new Promise((resolve, reject) => Model.count(error => T.error(error) ? reject(error) : resolve(error)))
+  count = await new Promise((resolve, reject) => Model.count(error => T.err(error) ? reject(error) : resolve(error)))
   cmpCount(count, 6)
   process.stdout.write(`  ➜ ok\n`)
 
@@ -108,7 +108,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where(2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where(2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -126,7 +126,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -144,7 +144,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, =, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '=', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '=', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -162,7 +162,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, >, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '>', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '>', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -180,7 +180,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, >=, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '>=', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '>=', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -198,7 +198,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, <, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '<', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '<', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -216,7 +216,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, <=, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '<=', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '<=', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -234,7 +234,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, !=, 2) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '!=', 2).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '!=', 2).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -252,7 +252,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where({ id: 2 }) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({ id: 2 }).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({ id: 2 }).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -271,7 +271,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where(0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where(0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -289,7 +289,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, 0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -307,7 +307,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, =, 0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '=', 0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '=', 0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -325,7 +325,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, >, 7) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '>', 7).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '>', 7).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -343,7 +343,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, >=, 7) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '>=', 7).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '>=', 7).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -361,7 +361,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, <, 0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '<', 0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '<', 0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -379,7 +379,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, <=, 0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '<=', 0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '<=', 0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -397,7 +397,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where(id, !=, 0) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', '!=', 0).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', '!=', 0).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -415,7 +415,7 @@ const whereBase = async Model => {
     let users = null
 
     process.stdout.write('  where({ id: 0 }) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({ id: 0 }).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({ id: 0 }).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -433,7 +433,7 @@ const whereBase = async Model => {
   const name_like_1 = async _ => {
     let users = null
     process.stdout.write('  where(name, like, %b%) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%b%').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%b%').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -450,7 +450,7 @@ const whereBase = async Model => {
   const name_like_2 = async _ => {
     let users = null
     process.stdout.write('  where(name, like, %oa) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%oa').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%oa').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -467,7 +467,7 @@ const whereBase = async Model => {
   const name_like_3 = async _ => {
     let users = null
     process.stdout.write('  where(name, like, %oao) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%oao').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%oao').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -484,7 +484,7 @@ const whereBase = async Model => {
   const name_like_4 = async _ => {
     let users = null
     process.stdout.write('  where(name, like, %d%) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%d%').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'like', '%d%').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -502,7 +502,7 @@ const whereBase = async Model => {
   const name_not_like_1 = async _ => {
     let users = null
     process.stdout.write('  where(name, not like, %b%) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%b%').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%b%').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -519,7 +519,7 @@ const whereBase = async Model => {
   const name_not_like_2 = async _ => {
     let users = null
     process.stdout.write('  where(name, not like, %oa) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%oa').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%oa').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -536,7 +536,7 @@ const whereBase = async Model => {
   const name_not_like_3 = async _ => {
     let users = null
     process.stdout.write('  where(name, not like, %oao) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%oao').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%oao').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -553,7 +553,7 @@ const whereBase = async Model => {
   const name_not_like_4 = async _ => {
     let users = null
     process.stdout.write('  where(name, not like, %d%) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%d%').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('name', 'not like', '%d%').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2, data3])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -571,7 +571,7 @@ const whereBase = async Model => {
   const id_arr_24_1 = async _ => {
     let users = null
     process.stdout.write('  where([2, 4]) closure\n')
-    users = await new Promise((resolve, reject) => Model.where([2, 4]).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where([2, 4]).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -588,7 +588,7 @@ const whereBase = async Model => {
   const id_arr_24_2 = async _ => {
     let users = null
     process.stdout.write('  where(id, [2, 4]) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', [2, 4]).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', [2, 4]).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -605,7 +605,7 @@ const whereBase = async Model => {
   const id_arr_24_3 = async _ => {
     let users = null
     process.stdout.write('  where(id, IN, [2, 4]) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 'IN', [2, 4]).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 'IN', [2, 4]).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -622,7 +622,7 @@ const whereBase = async Model => {
   const id_arr_24_4 = async _ => {
     let users = null
     process.stdout.write('  where(id, NOT IN, [2, 4]) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 'NOT IN', [2, 4]).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 'NOT IN', [2, 4]).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data3, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -639,7 +639,7 @@ const whereBase = async Model => {
   const id_arr_24_5 = async _ => {
     let users = null
     process.stdout.write('  where({ id: [2, 4] }) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({ id: [2, 4] }).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({ id: [2, 4] }).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -657,7 +657,7 @@ const whereBase = async Model => {
   const id_arr_0_1 = async _ => {
     let users = null
     process.stdout.write('  where([]) closure\n')
-    users = await new Promise((resolve, reject) => Model.where([]).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where([]).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -674,7 +674,7 @@ const whereBase = async Model => {
   const id_arr_0_2 = async _ => {
     let users = null
     process.stdout.write('  where(id, []) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', []).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', []).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -691,7 +691,7 @@ const whereBase = async Model => {
   const id_arr_0_3 = async _ => {
     let users = null
     process.stdout.write('  where(id, IN, []) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 'IN', []).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 'IN', []).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -708,7 +708,7 @@ const whereBase = async Model => {
   const id_arr_0_4 = async _ => {
     let users = null
     process.stdout.write('  where(id, NOT IN, []) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('id', 'NOT IN', []).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('id', 'NOT IN', []).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -725,7 +725,7 @@ const whereBase = async Model => {
   const id_arr_0_5 = async _ => {
     let users = null
     process.stdout.write('  where({ id: [] }) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({ id: [] }).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({ id: [] }).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -787,7 +787,7 @@ const whereAnd = async Model => {
     let users = null
 
     process.stdout.write('  where({sex: male, bio: test}) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({sex: 'male', bio: 'test'}).all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({sex: 'male', bio: 'test'}).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -805,7 +805,7 @@ const whereAnd = async Model => {
     let users = null
 
     process.stdout.write('  where(sex, male).where(bio, test) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('sex', 'male').where('bio', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('sex', 'male').where('bio', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -823,7 +823,7 @@ const whereAnd = async Model => {
     let users = null
 
     process.stdout.write('  where(sex, male).andWhere(bio, test) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('sex', 'male').andWhere('bio', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('sex', 'male').andWhere('bio', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -841,7 +841,7 @@ const whereAnd = async Model => {
     let users = null
 
     process.stdout.write('  where(sex, male).andWhere(bio, !=, test) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('sex', 'male').andWhere('bio', '!=', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('sex', 'male').andWhere('bio', '!=', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -866,7 +866,7 @@ const whereOr = async Model => {
     let users = null
 
     process.stdout.write('  where(sex, female).orWhere(bio, test) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1, data2])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -884,7 +884,7 @@ const whereOr = async Model => {
     let users = null
 
     process.stdout.write('  where(sex, female).orWhere(bio, !=, test) closure\n')
-    users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', '!=', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', '!=', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data2, data3, data4, data4, data4])
     process.stdout.write(`  ➜ ok\n`)
 
@@ -907,7 +907,7 @@ const whereAndOr = async Model => {
   let users = null
 
   process.stdout.write('  where(sex, male).andWhere(bio, !=, test).orWhere(height, 171.3) closure\n')
-  users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', '!=', 'test').all(error => T.error(error) ? reject(error) : resolve(error)))
+  users = await new Promise((resolve, reject) => Model.where('sex', 'female').orWhere('bio', '!=', 'test').all(error => T.err(error) ? reject(error) : resolve(error)))
   cmpUsers(users, [data2, data3, data4, data4, data4])
   process.stdout.write(`  ➜ ok\n`)
 
@@ -925,7 +925,7 @@ const one = async Model => {
   let user = null
 
   process.stdout.write('  one closure\n')
-  user = await new Promise((resolve, reject) => Model.where(3).one(error => T.error(error) ? reject(error) : resolve(error)))
+  user = await new Promise((resolve, reject) => Model.where(3).one(error => T.err(error) ? reject(error) : resolve(error)))
   cmpUser(user, data3)
   process.stdout.write(`  ➜ ok\n`)
 
@@ -943,7 +943,7 @@ const select = async Model => {
   let user = null
 
   process.stdout.write('  select closure\n')
-  user = await new Promise((resolve, reject) => Model.where(3).select('id').one(error => T.error(error) ? reject(error) : resolve(error)))
+  user = await new Promise((resolve, reject) => Model.where(3).select('id').one(error => T.err(error) ? reject(error) : resolve(error)))
   if (user.name !== undefined) {
     throw new Error('欄位錯誤！')
   }
@@ -967,7 +967,7 @@ const limit = async Model => {
   let users = null
 
   process.stdout.write('  where(id, >, 1).where(id, <, 6).limit(3) closure\n')
-  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).limit(3).all(error => T.error(error) ? reject(error) : resolve(error)))
+  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).limit(3).all(error => T.err(error) ? reject(error) : resolve(error)))
   cmpUsers(users, [data2, data3, data4])
   process.stdout.write(`  ➜ ok\n`)
 
@@ -985,7 +985,7 @@ const order = async Model => {
   let users = null
 
   process.stdout.write('  where(id, >, 1).where(id, <, 6).order(id desc) closure\n')
-  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).order('id desc').all(error => T.error(error) ? reject(error) : resolve(error)))
+  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).order('id desc').all(error => T.err(error) ? reject(error) : resolve(error)))
   cmpUsers(users, [data4, data4, data3, data2])
   process.stdout.write(`  ➜ ok\n`)
 
@@ -1003,7 +1003,7 @@ const offset = async Model => {
   let users = null
 
   process.stdout.write('  where(id, >, 1).where(id, <, 6).offset(1) closure\n')
-  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).offset(1).limit(3).all(error => T.error(error) ? reject(error) : resolve(error)))
+  users = await new Promise((resolve, reject) => Model.where('id', '>', 1).where('id', '<', 6).offset(1).limit(3).all(error => T.err(error) ? reject(error) : resolve(error)))
   cmpUsers(users, [data3, data4, data4])
   process.stdout.write(`  ➜ ok\n`)
 
@@ -1022,7 +1022,7 @@ const update = async Model => {
   let users = null
 
   process.stdout.write('  update() closure\n')
-  count = await new Promise((resolve, reject) => Model.update({ name: 'a' }, error => T.error(error) ? reject(error) : resolve(error)))
+  count = await new Promise((resolve, reject) => Model.update({ name: 'a' }, error => T.err(error) ? reject(error) : resolve(error)))
   if (count !== 6) { throw new Error('更新筆數錯誤') }
   users = await Model.all()
   for (const user of users) { if (user.name !== 'a') { throw new Error('更新錯誤') } }
@@ -1049,7 +1049,7 @@ const updateWhere = async Model => {
   await Model.update({ name: 'x' })
 
   process.stdout.write('  where(id > 1).update() closure\n')
-  count = await new Promise((resolve, reject) => Model.where('id', '>', 1).update({ name: 'a' }, error => T.error(error) ? reject(error) : resolve(error)))
+  count = await new Promise((resolve, reject) => Model.where('id', '>', 1).update({ name: 'a' }, error => T.err(error) ? reject(error) : resolve(error)))
   if (count !== 5) { throw new Error('更新筆數錯誤') }
   users = await Model.where('id', '<=', 1).all()
   for (const user of users) { if (user.name !== 'x') { throw new Error('更新錯誤') } }
@@ -1085,7 +1085,7 @@ const updateObject = async Model => {
   await new Promise(async (resolve, reject) => {
     const user = await Model.where(3).one()
     user.name = 'a'
-    user.save(error => T.error(error) ? reject(error) : resolve(error))
+    user.save(error => T.err(error) ? reject(error) : resolve(error))
   })
 
   users = await Model.where('id', '!=', 3).all()
@@ -1129,7 +1129,7 @@ const del = async Model => {
   await Model.create(data4)
 
   process.stdout.write('  delete() closure\n')
-  count = await new Promise((resolve, reject) => Model.delete(error => T.error(error) ? reject(error) : resolve(error)))
+  count = await new Promise((resolve, reject) => Model.delete(error => T.err(error) ? reject(error) : resolve(error)))
   if (count !== 6) { throw new Error('更新筆數錯誤') }
   users = await Model.all()
   cmpUsers(users, [])
@@ -1178,7 +1178,7 @@ const delWhere = async Model => {
   await Model.create(data4)
 
   process.stdout.write('  where(id > 1).delete() closure\n')
-  count = await new Promise((resolve, reject) => Model.where('id', '>', 1).delete(error => T.error(error) ? reject(error) : resolve(error)))
+  count = await new Promise((resolve, reject) => Model.where('id', '>', 1).delete(error => T.err(error) ? reject(error) : resolve(error)))
   if (count !== 5) { throw new Error('更新筆數錯誤') }
   users = await Model.all()
   cmpUsers(users, [data1])
@@ -1228,7 +1228,7 @@ const delObject = async Model => {
   process.stdout.write('  obj.delete() closure\n')
   await new Promise(async (resolve, reject) => {
     const user = await Model.where(3).one()
-    user.delete(error => T.error(error) ? reject(error) : resolve(error))
+    user.delete(error => T.err(error) ? reject(error) : resolve(error))
   })
   users = await Model.all()
   cmpUsers(users, [data1, data2, data4, data4, data4])
