@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  up (db) {
+  up(db) {
     db = db.create('devices', '裝置')
     db.attr('id').int().unsigned().notNull().autoIncrement().comment('ID')
 

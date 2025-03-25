@@ -6,12 +6,12 @@
  */
 
 const FileSystem = require('fs/promises')
-const Xterm      = require('@oawu/xterm')
-const Progress   = require('@oawu/cli-progress')
+const Xterm = require('@oawu/xterm')
+const Progress = require('@oawu/cli-progress')
 
-const DB       = require('./lib/DB.js')
-const Config   = require('./lib/Config.js')
-const Migrate  = require('./lib/Migrate.js')
+const DB = require('./Libs/DB.js')
+const Config = require('./Libs/Config.js')
+const Migrate = require('./Libs/Migrate.js')
 
 const { closureOrPromise, Type: T, tryIgnore, Str: { pad } } = require('@oawu/helper')
 
@@ -110,26 +110,26 @@ const _versions = async version => {
   let _migrations = dir !== null ? await tryIgnore(FileSystem.readdir(dir), []) : []
 
   const migrations = _migrations.map(_file => {
-      const file = /^(?<version>[0-9]+)\-(?<name>.*)\.js$/ig.exec(_file)
-      if (file === null) {
-        return null
-      }
+    const file = /^(?<version>[0-9]+)\-(?<name>.*)\.js$/ig.exec(_file)
+    if (file === null) {
+      return null
+    }
 
-      let migrate = null
-      try { migrate = require(`${dir}${file.groups.version}-${file.groups.name}.js`) }
-      catch (e) { migrate = null }
+    let migrate = null
+    try { migrate = require(`${dir}${file.groups.version}-${file.groups.name}.js`) }
+    catch (e) { migrate = null }
 
-      if (migrate === null) {
-        return null
-      }
+    if (migrate === null) {
+      return null
+    }
 
-      return {
-        version: file.groups.version * 1,
-        title: file.groups.name,
-        up: migrate.up,
-        down: migrate.down
-      }
-    })
+    return {
+      version: file.groups.version * 1,
+      title: file.groups.name,
+      up: migrate.up,
+      down: migrate.down
+    }
+  })
     .filter(t => t !== null)
     .sort((a, b) => a.version - b.version)
 
@@ -235,7 +235,7 @@ const execute = (...argvs) => {
       process.stdout.write([,
         ` ${'【完成 Migration 更新】'.yellow}`,
         `${' '.repeat(3)}🎉 Yes! 已經完成版本更新！`,
-        `${' '.repeat(3)}🚀 目前版本為${'：'.gray.dim}${pad(migrate.version, 3).lightGray}`,,,
+        `${' '.repeat(3)}🚀 目前版本為${'：'.gray.dim}${pad(migrate.version, 3).lightGray}`, , ,
       ].join("\n"))
 
       return migrate
@@ -345,7 +345,7 @@ const refresh = (...argvs) => {
       process.stdout.write([,
         ` ${'【完成 Migration 更新】'.yellow}`,
         `${' '.repeat(3)}🎉 Yes! 已經完成版本更新！`,
-        `${' '.repeat(3)}🚀 目前版本為${'：'.gray.dim}${pad(migrate.version, 3).lightGray}`,,,
+        `${' '.repeat(3)}🚀 目前版本為${'：'.gray.dim}${pad(migrate.version, 3).lightGray}`, , ,
       ].join("\n"))
 
       return migrate

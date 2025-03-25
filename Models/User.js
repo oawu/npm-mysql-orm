@@ -5,7 +5,6 @@
  * @link        https://www.ioa.tw/
  */
 
-const Device = function() {}
-Device.table = 'User'
+const User = function () { }
 
-module.exports = Device
+module.exports = User

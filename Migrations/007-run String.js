@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  up (db) {
+  up(db) {
     return 'ALTER TABLE `IndexCase` DROP INDEX `name_number_unique`;'
   },
   down: db => [

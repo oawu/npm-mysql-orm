@@ -787,17 +787,17 @@ const whereAnd = async Model => {
     let users = null
 
     process.stdout.write('  where({sex: male, bio: test}) closure\n')
-    users = await new Promise((resolve, reject) => Model.where({sex: 'male', bio: 'test'}).all(error => T.err(error) ? reject(error) : resolve(error)))
+    users = await new Promise((resolve, reject) => Model.where({ sex: 'male', bio: 'test' }).all(error => T.err(error) ? reject(error) : resolve(error)))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
     process.stdout.write('  where({sex: male, bio: test}) promise\n')
-    users = await new Promise((resolve, reject) => Model.where({sex: 'male', bio: 'test'}).all().then(resolve).catch(reject))
+    users = await new Promise((resolve, reject) => Model.where({ sex: 'male', bio: 'test' }).all().then(resolve).catch(reject))
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
 
     process.stdout.write('  where({sex: male, bio: test}) async\n')
-    users = await Model.where({sex: 'male', bio: 'test'}).all()
+    users = await Model.where({ sex: 'male', bio: 'test' }).all()
     cmpUsers(users, [data1])
     process.stdout.write(`  ➜ ok\n`)
   }

@@ -16,19 +16,19 @@ Config.connect = {
   password: "1234",
   database: "node-orm",
   port: 3306,
-  waitForConnections : true,
-  connectionLimit : 3,
+  waitForConnections: true,
+  connectionLimit: 3,
   charset: 'utf8mb4'
 }
 
 // // Migration 檔案位置
-Config.migrationsDir = __dirname + path.sep + 'migrations' + path.sep
+Config.migrationsDir = __dirname + path.sep + 'Migrations' + path.sep
 
 // Model 檔案位置
-Config.modelsDir = __dirname + path.sep + 'models' + path.sep
+Config.modelsDir = __dirname + path.sep + 'Models' + path.sep
 
 // // Log 檔案位置
-Config.queryLogDir = __dirname + path.sep + 'logs' + path.sep
+Config.queryLogDir = __dirname + path.sep + 'Logs' + path.sep
 
 Init()
   .then(async _ => {

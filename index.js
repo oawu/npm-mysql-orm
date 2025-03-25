@@ -6,9 +6,9 @@
  */
 
 module.exports = {
-  DB      : require('./lib/DB.js'),
-  Init    : require('./lib/Init.js'),
-  Model   : require('./Model.js'),
-  Config  : require('./lib/Config.js'),
-  Migrate : require('./Migrate.js'),
+  DB: require('./Libs/DB.js'),
+  Init: require('./Libs/Init.js'),
+  Model: require('./Model.js'),
+  Config: require('./Libs/Config.js'),
+  Migrate: require('./Migrate.js'),
 }

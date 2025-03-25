@@ -146,11 +146,11 @@ module.exports = async _ => {
   await executeNumShow(0, true)
   await executeNumShow(null, false)
   await executeNumShow(null, true)
-// =======
+  // =======
   await refreshBase()
   await refreshShow(true)
   await refreshShow(false)
-// =======
+  // =======
 
   process.stdout.write(`  測試版本 0\n`)
   await Migrate.execute(0)
@@ -192,7 +192,7 @@ module.exports = async _ => {
   if (await Migrate.version() !== 8) { throw new Error('版本錯誤') }
   process.stdout.write(`  ➜ ok\n`)
 
-// =======
+  // =======
 
   process.stdout.write(`  測試版本 0\n`)
   await Migrate.execute(0)

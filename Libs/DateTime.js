@@ -7,7 +7,7 @@
 
 const { Str: { pad } } = require('@oawu/helper')
 
-const DateTime = function(type, value = new Date()) {
+const DateTime = function (type, value = new Date()) {
   if (!(this instanceof DateTime)) {
     return new DateTime(type, value)
   }
@@ -17,44 +17,49 @@ const DateTime = function(type, value = new Date()) {
   this.setValue(value)
 }
 
-Object.defineProperty(DateTime.prototype, 'format', { get () {
-  if (this.type == 'time') {
-    return 'H:i:s'
-  }
-  if (this.type == 'date') {
-    return 'Y-m-d'
-  }
-  return 'Y-m-d H:i:s'
-} })
-
-Object.defineProperty(DateTime.prototype, 'regex', { get () {
-  if (this.type == 'time') {
-    return /^(?<H>[0-1][0-9]|2[0-3]):(?<i>[0-5][0-9]):(?<s>[0-5][0-9])$/g
-  }
-  if (this.type == 'date') {
-    return /^(?<Y>[\d]{4})-(?<m>0[1-9]|1[0-2])-(?<d>0[1-9]|[1-2][0-9]|3[0-1])$/g
-  }
-  return /^(?<Y>[\d]{4})-(?<m>0[1-9]|1[0-2])-(?<d>0[1-9]|[1-2][0-9]|3[0-1]) (?<H>[0-1][0-9]|2[0-3]):(?<i>[0-5][0-9]):(?<s>[0-5][0-9])$/g
-} })
-
-Object.defineProperty(DateTime.prototype, 'value', { get () {
-  return this.date instanceof Date
-    ? this.format
-      .replace('Y', this.date.getFullYear())
-      .replace('m', pad(this.date.getMonth() + 1))
-      .replace('d', pad(this.date.getDate()))
-      .replace('H', pad(this.date.getHours()))
-      .replace('i', pad(this.date.getMinutes()))
-      .replace('s', pad(this.date.getSeconds()))
-    : null
+Object.defineProperty(DateTime.prototype, 'format', {
+  get() {
+    if (this.type == 'time') {
+      return 'H:i:s'
+    }
+    if (this.type == 'date') {
+      return 'Y-m-d'
+    }
+    return 'Y-m-d H:i:s'
   }
 })
 
-DateTime.prototype.toString = function() {
+Object.defineProperty(DateTime.prototype, 'regex', {
+  get() {
+    if (this.type == 'time') {
+      return /^(?<H>[0-1][0-9]|2[0-3]):(?<i>[0-5][0-9]):(?<s>[0-5][0-9])$/g
+    }
+    if (this.type == 'date') {
+      return /^(?<Y>[\d]{4})-(?<m>0[1-9]|1[0-2])-(?<d>0[1-9]|[1-2][0-9]|3[0-1])$/g
+    }
+    return /^(?<Y>[\d]{4})-(?<m>0[1-9]|1[0-2])-(?<d>0[1-9]|[1-2][0-9]|3[0-1]) (?<H>[0-1][0-9]|2[0-3]):(?<i>[0-5][0-9]):(?<s>[0-5][0-9])$/g
+  }
+})
+
+Object.defineProperty(DateTime.prototype, 'value', {
+  get() {
+    return this.date instanceof Date
+      ? this.format
+        .replace('Y', this.date.getFullYear())
+        .replace('m', pad(this.date.getMonth() + 1))
+        .replace('d', pad(this.date.getDate()))
+        .replace('H', pad(this.date.getHours()))
+        .replace('i', pad(this.date.getMinutes()))
+        .replace('s', pad(this.date.getSeconds()))
+      : null
+  }
+})
+
+DateTime.prototype.toString = function () {
   return this.value || ''
 }
 
-DateTime.prototype.setValue = function(val) {
+DateTime.prototype.setValue = function (val) {
   if (val === null) {
     this.date = null
     return this

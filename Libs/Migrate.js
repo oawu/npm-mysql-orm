@@ -27,7 +27,7 @@ const _update = obj => {
   return sets
 }
 
-const MigrateCreateAttr = function(name) {
+const MigrateCreateAttr = function (name) {
   if (!(this instanceof MigrateCreateAttr)) {
     return new MigrateCreateAttr(name)
   }
@@ -40,76 +40,77 @@ const _val = val => val !== null
     : 'CURRENT_TIMESTAMP'
   : 'NULL'
 
-MigrateCreateAttr.prototype = {...MigrateCreateAttr.prototype,
-  toString () { return this.tokens.join(' ') },
+MigrateCreateAttr.prototype = {
+  ...MigrateCreateAttr.prototype,
+  toString() { return this.tokens.join(' ') },
 
-  tinyint (length = 3) {
+  tinyint(length = 3) {
     this.tokens.push(`tinyint(${T.num(length) ? 3 : length})`)
     return this
   },
-  smallint (length = 5) {
+  smallint(length = 5) {
     this.tokens.push(`smallint(${T.num(length) ? 5 : length})`)
     return this
   },
-  mediumint (length = 8) {
+  mediumint(length = 8) {
     this.tokens.push(`mediumint(${T.num(length) ? 8 : length})`)
     return this
   },
-  int (length = 10) {
+  int(length = 10) {
     this.tokens.push(`int(${T.num(length) ? 10 : length})`)
     return this
   },
-  bigint (length = 20) {
+  bigint(length = 20) {
     this.tokens.push(`bigint(${T.num(length) ? 20 : length})`)
     return this
   },
-  varchar (length = 190) {
+  varchar(length = 190) {
     this.tokens.push(`varchar(${T.num(length) ? 190 : length})`)
     return this
   },
-  enum (...items) {
+  enum(...items) {
     this.tokens.push(`enum(${items.map(item => `'${item}'`).join(',')})`)
     return this
   },
-  text () {
+  text() {
     this.tokens.push('text')
     return this
   },
-  decimal (maximum, digits) {
+  decimal(maximum, digits) {
     if (T.num(maximum) && T.num(digits)) {
       this.tokens.push(`decimal(${maximum},${digits})`)
     }
     return this
   },
-  datetime () {
+  datetime() {
     this.tokens.push('datetime')
     return this
   },
-  collate (code) {
+  collate(code) {
     this.tokens.push(`COLLATE ${code}`)
     return this
   },
-  notNull () {
+  notNull() {
     this.tokens.push('NOT NULL')
     return this
   },
-  comment (text) {
+  comment(text) {
     this.tokens.push(`COMMENT '${text}'`)
     return this
   },
-  autoIncrement () {
+  autoIncrement() {
     this.tokens.push('AUTO_INCREMENT')
     return this
   },
-  unsigned () {
+  unsigned() {
     this.tokens.push('unsigned')
     return this
   },
-  default (val) {
+  default(val) {
     this.tokens.push(`DEFAULT ${_val(val)}`)
     return this
   },
-  on (action, val) {
+  on(action, val) {
     this.tokens.push(`ON ${action.toUpperCase()} ${_val(val)}`)
     return this
   },
@@ -125,7 +126,7 @@ MigrateCreateAttr.prototype = {...MigrateCreateAttr.prototype,
  *   bigint(20) ||    8  || -9223372036854775808 | 9223372036854775807 ||   0 | 18446744073709551615
 **/
 
-const MigrateCreate = function(table, comment) {
+const MigrateCreate = function (table, comment) {
   if (!(this instanceof MigrateCreate)) {
     return new MigrateCreate(table, comment)
   }
@@ -135,31 +136,32 @@ const MigrateCreate = function(table, comment) {
   this.columns = {}
 }
 
-MigrateCreate.prototype = {...MigrateCreate.prototype,
-  toString () {
+MigrateCreate.prototype = {
+  ...MigrateCreate.prototype,
+  toString() {
     return 'CREATE TABLE `' + this.table + '` (' + this.attrs.join(',') + ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci' + (this.comment ? " COMMENT='" + this.comment + "'" : '') + ";"
   },
 
-  index (columns, name = null) {
+  index(columns, name = null) {
     if (!T.arr(columns) || columns.length <= 0) {
       return this
     }
     this.attrs.push(`INDEX ${T.str(name) ? name : `${columns.join('_')}_index`} (${columns.map(column => '`' + column + '`').join(', ')})`)
   },
-  unique (columns, name = null) {
+  unique(columns, name = null) {
     if (!T.arr(columns) || columns.length <= 0) {
       return this
     }
     this.attrs.push(`UNIQUE ${T.str(name) ? name : `${columns.join('_')}_unique`} (${columns.map(column => '`' + column + '`').join(', ')})`)
   },
-  primaryKey (column) {
+  primaryKey(column) {
     if (typeof this.columns[column] != 'undefined') {
       this.attrs.push('PRIMARY KEY (`' + column + '`)')
     }
     return this
   },
 
-  attr (name) {
+  attr(name) {
     const attr = MigrateCreateAttr(name)
     this.attrs.push(attr)
     this.columns[name] = attr
@@ -167,29 +169,29 @@ MigrateCreate.prototype = {...MigrateCreate.prototype,
   }
 }
 
-const MigrateDrop = function(table) {
+const MigrateDrop = function (table) {
   if (!(this instanceof MigrateDrop)) {
     return new MigrateDrop(table)
   }
   this.table = table
 }
 
-MigrateDrop.prototype.toString = function() {
+MigrateDrop.prototype.toString = function () {
   return 'DROP TABLE IF EXISTS `' + this.table + '`;'
 }
 
-const MigrateTruncate = function(table) {
+const MigrateTruncate = function (table) {
   if (!(this instanceof MigrateTruncate)) {
     return new MigrateTruncate(table)
   }
   this.table = table
 }
 
-MigrateTruncate.prototype.toString = function() {
+MigrateTruncate.prototype.toString = function () {
   return 'TRUNCATE TABLE `' + this.table + '`;'
 }
 
-const MigrateInserts = function(table, datas, length = 100) {
+const MigrateInserts = function (table, datas, length = 100) {
   if (!(this instanceof MigrateInserts)) {
     return new MigrateInserts(table, datas, length)
   }
@@ -198,7 +200,7 @@ const MigrateInserts = function(table, datas, length = 100) {
   this.length = T.num(length) ? length : 100
 }
 
-MigrateInserts.prototype.toString = function() {
+MigrateInserts.prototype.toString = function () {
   const datas = this.datas.map(_insert)
 
   if (!datas.length) {

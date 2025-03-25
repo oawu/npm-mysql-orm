@@ -13,16 +13,16 @@ const CREATE_AT = 'createAt'
 const UPDATE_AT = 'updateAt'
 
 const _modify = {
-  int   : val => val !== null ? parseInt(val, 10) : val ,
-  float : val => val !== null ? parseFloat(val) : val ,
-  string: val => val !== null ? `${val}` : null ,
-  json  : val => val !== null
+  int: val => val !== null ? parseInt(val, 10) : val,
+  float: val => val !== null ? parseFloat(val) : val,
+  string: val => val !== null ? `${val}` : null,
+  json: val => val !== null
     ? T.str(val)
       ? Json.toObject(val)
       : val
-    : null ,
+    : null,
 
-  enum  : (format, val) => {
+  enum: (format, val) => {
     if (val === null) {
       return null
     }
@@ -36,7 +36,7 @@ const _modify = {
       throw new Error(`「${format.field}」不可以為 NULL`)
     }
   },
-  init (format, val) {
+  init(format, val) {
     this.nullable(format, val)
 
     if (['tinyint', 'smallint', 'mediumint', 'int', 'bigint'].includes(format.type)) {
@@ -56,7 +56,7 @@ const _modify = {
     }
     return this.string(val)
   },
-  update (format, oldVal, newVal) {
+  update(format, oldVal, newVal) {
     this.nullable(format, newVal)
 
     if (oldVal instanceof DateTime) {
@@ -127,7 +127,7 @@ const Model = function (table, row, isNew = false) {
     attrs: new Map(),
     dirties: [],
 
-    get primaries () {
+    get primaries() {
       const primaries = {}
       for (let key of table.primaries) {
         if (this.attrs.has(key)) {
@@ -138,7 +138,7 @@ const Model = function (table, row, isNew = false) {
     }
   }
 
-  Object.defineProperty(object, '$', { get () { return $ } })
+  Object.defineProperty(object, '$', { get() { return $ } })
 
   if (isNew) {
     row = _attrDefaults(table, row)
@@ -153,11 +153,11 @@ const Model = function (table, row, isNew = false) {
 
     Object.defineProperty(object, name, {
       enumerable: true,
-      get () { return $.attrs.get(name) },
-      set (val) {
+      get() { return $.attrs.get(name) },
+      set(val) {
         return $.dirties.push(name),
           $.attrs.set(name, _modify.update(table.columns[name],
-          $.attrs.get(name), val))
+            $.attrs.get(name), val))
       }
     })
   }
@@ -165,13 +165,13 @@ const Model = function (table, row, isNew = false) {
   return object
 }
 
-Model.prototype.save = function(closure) {
+Model.prototype.save = function (closure) {
   return this.$.isNew
     ? this.insert(closure)
     : this.update(closure)
 }
 
-Model.prototype.insert = function(closure) {
+Model.prototype.insert = function (closure) {
   const attrs = {}
 
   for (let key in this.$.table.columns) {
@@ -181,7 +181,7 @@ Model.prototype.insert = function(closure) {
   return this.$.table.insert(this, attrs, closure)
 }
 
-Model.prototype.update = function(closure) {
+Model.prototype.update = function (closure) {
   if (!Object.keys(this.$.primaries).length) {
     return closureOrPromise(closure, new Error(`更新資料失敗，錯誤原因：找不到 Primary Key`))
   }
@@ -203,7 +203,7 @@ Model.prototype.update = function(closure) {
   return this.$.table.update(this, attrs, this.$.primaries, closure)
 }
 
-Model.prototype.delete = function(closure) {
+Model.prototype.delete = function (closure) {
   if (Object.keys(this.$.primaries).length) {
     return this.$.table.delete(this, this.$.primaries, closure)
   }

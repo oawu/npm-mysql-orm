@@ -75,9 +75,9 @@ module.exports = (closure = null) => closureOrPromise(closure, async _ => {
   }
 
   if (!T.str(Config.connect.host)
-   || !T.str(Config.connect.user)
-   || !T.str(Config.connect.password)
-   || !T.str(Config.connect.database)) {
+    || !T.str(Config.connect.user)
+    || !T.str(Config.connect.password)
+    || !T.str(Config.connect.database)) {
     throw new Error('MySQL Config 格式有誤！')
   }
 

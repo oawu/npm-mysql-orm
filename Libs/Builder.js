@@ -42,19 +42,19 @@ const _where = (table, ...options) => {
     const val = options[0]
 
     if (val === null) {
-      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: []}
+      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: [] }
     }
     if (T.num(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val]}
+      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val] }
     }
     if (T.str(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val]}
+      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val] }
     }
     if (T.arr(val)) {
       if (val.length > 0) {
         return { str: `${_quote(table)}.${_quote(key)} IN (${Array(val.length).fill('?').join(',')})`, vals: val }
       } else {
-        return { str: `1 = 0`, vals: []}
+        return { str: `1 = 0`, vals: [] }
       }
     }
     if (T.obj(val)) {
@@ -84,7 +84,9 @@ const _where = (table, ...options) => {
         }
       }
 
-      return { str: strs.join(' AND '), vals: vals.reduce((a, b) => a.concat(b), []) }
+      if (strs.length > 0) {
+        return { str: strs.join(' AND '), vals }
+      }
     }
   }
   if (options.length == 2) {
@@ -92,49 +94,52 @@ const _where = (table, ...options) => {
     const val = options[1]
 
     if (val === null) {
-      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: []}
+      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: [] }
     }
     if (T.num(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val]}
+      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val] }
     }
     if (T.str(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val]}
+      return { str: `${_quote(table)}.${_quote(key)} = ?`, vals: [val] }
     }
     if (T.arr(val)) {
       if (val.length > 0) {
         return { str: `${_quote(table)}.${_quote(key)} IN (${Array(val.length).fill('?').join(',')})`, vals: val }
       } else {
-        return { str: `1 = 0`, vals: []}
+        return { str: `1 = 0`, vals: [] }
       }
     }
   }
-  if (options.length == 3) {
-    const key = options[0]
-    const cmp = options[1].trim()
-    const val = options[2]
 
-    if (val === null) {
-      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: []}
+  const key = options[0]
+  const cmp = options[1].trim()
+  const val = options[2]
+
+  if (val === null) {
+    if (['!=', '!==', 'IS NOT'].includes(cmp.toUpperCase())) {
+      return { str: `${_quote(table)}.${_quote(key)} IS NOT NULL`, vals: [] }
+    } else {
+      return { str: `${_quote(table)}.${_quote(key)} IS NULL`, vals: [] }
     }
-    if (T.num(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} ${cmp} ?`, vals: [val]}
-    }
-    if (T.str(val)) {
-      return { str: `${_quote(table)}.${_quote(key)} ${cmp} ?`, vals: [val]}
-    }
-    if (T.arr(val)) {
-      if (['!=', '!==', 'NOT IN'].includes(cmp.toUpperCase())) {
-        if (val.length > 0) {
-          return { str: `${_quote(table)}.${_quote(key)} NOT IN (${Array(val.length).fill('?').join(',')})`, vals: val }
-        } else {
-          return { str: `1 = 1`, vals: []}
-        }
+  }
+  if (T.num(val)) {
+    return { str: `${_quote(table)}.${_quote(key)} ${cmp} ?`, vals: [val] }
+  }
+  if (T.str(val)) {
+    return { str: `${_quote(table)}.${_quote(key)} ${cmp} ?`, vals: [val] }
+  }
+  if (T.arr(val)) {
+    if (['!=', '!==', 'NOT IN'].includes(cmp.toUpperCase())) {
+      if (val.length > 0) {
+        return { str: `${_quote(table)}.${_quote(key)} NOT IN (${Array(val.length).fill('?').join(',')})`, vals: val }
       } else {
-        if (val.length > 0) {
-          return { str: `${_quote(table)}.${_quote(key)} IN (${Array(val.length).fill('?').join(',')})`, vals: val }
-        } else {
-          return { str: `1 = 0`, vals: []}
-        }
+        return { str: `1 = 1`, vals: [] }
+      }
+    } else {
+      if (val.length > 0) {
+        return { str: `${_quote(table)}.${_quote(key)} IN (${Array(val.length).fill('?').join(',')})`, vals: val }
+      } else {
+        return { str: `1 = 0`, vals: [] }
       }
     }
   }
@@ -164,7 +169,7 @@ const _find = (builder, closure, isOne) => {
   })
 }
 
-const Builder = function(proto, type = 'select') {
+const Builder = function (proto, type = 'select') {
   if (!(this instanceof Builder)) {
     return new Builder(proto, type)
   }
@@ -177,17 +182,20 @@ const Builder = function(proto, type = 'select') {
 
 Builder.quote = _quote
 
-Object.defineProperty(Builder.prototype, 'name', { get () {
-  return this.proto.table === undefined
-    ? this.proto.name
-    : this.proto.table
+Object.defineProperty(Builder.prototype, 'name', {
+  get() {
+    return this.proto.table === undefined
+      ? this.proto.name
+      : this.proto.table
   }
 })
-Object.defineProperty(Builder.prototype, 'vals', { get () {
-  return this._vals
-} })
+Object.defineProperty(Builder.prototype, 'vals', {
+  get() {
+    return this._vals
+  }
+})
 
-Builder.prototype.andWhere = function(...options) {
+Builder.prototype.andWhere = function (...options) {
   const where = _where(this.name, ...options)
   if (where === null) {
     return this
@@ -203,7 +211,7 @@ Builder.prototype.andWhere = function(...options) {
   return this
 }
 
-Builder.prototype.orWhere = function(...options) {
+Builder.prototype.orWhere = function (...options) {
   const where = _where(this.name, ...options)
   if (where === null) {
     return this
@@ -219,11 +227,11 @@ Builder.prototype.orWhere = function(...options) {
   return this
 }
 
-Builder.prototype.where = function(...options) {
+Builder.prototype.where = function (...options) {
   return this.andWhere(...options)
 }
 
-Builder.prototype.select = function(...options) {
+Builder.prototype.select = function (...options) {
   let option = options.shift()
 
   if (option === undefined) {
@@ -277,7 +285,7 @@ Builder.prototype.select = function(...options) {
   return this
 }
 
-Builder.prototype.order = function(...options) {
+Builder.prototype.order = function (...options) {
   let option = options.shift()
 
   if (option === undefined) {
@@ -335,32 +343,32 @@ Builder.prototype.order = function(...options) {
   return this
 }
 
-Builder.prototype.limit = function(option) {
+Builder.prototype.limit = function (option) {
   this.option.limit = option
   return this
 }
 
-Builder.prototype.offset = function(option) {
+Builder.prototype.offset = function (option) {
   this.option.offset = option
   return this
 }
 
-Builder.prototype.group  = function(option) {
+Builder.prototype.group = function (option) {
   this.option.group = option
   return this
 }
 
-Builder.prototype.having = function(option) {
+Builder.prototype.having = function (option) {
   this.option.having = option
   return this
 }
 
-Builder.prototype.join = function(name, primary, foreign, type = 'INNER') {
+Builder.prototype.join = function (name, primary, foreign, type = 'INNER') {
   this.option.join = `${type} JOIN ${_quote(name)} ON ${_quote(name)}.${_quote(primary)}=${_quote(this.name)}.${_quote(foreign)}`
   return this
 }
 
-Builder.prototype.update = function(_attrs, closure = null) {
+Builder.prototype.update = function (_attrs, closure = null) {
   return closureOrPromise(closure, async _ => {
     this.type = 'update'
 
@@ -377,7 +385,7 @@ Builder.prototype.update = function(_attrs, closure = null) {
   })
 }
 
-Builder.prototype.delete = function(closure = null) {
+Builder.prototype.delete = function (closure = null) {
   return closureOrPromise(closure, async _ => {
     this.type = 'delete'
 
@@ -386,26 +394,26 @@ Builder.prototype.delete = function(closure = null) {
   })
 }
 
-Builder.prototype.findAll = function(closure = null) { return _find(this, closure, false) }
-Builder.prototype.findOne = function(closure = null) { return _find(this, closure, true) }
+Builder.prototype.findAll = function (closure = null) { return _find(this, closure, false) }
+Builder.prototype.findOne = function (closure = null) { return _find(this, closure, true) }
 
-Builder.prototype.count = function(closure = null) {
+Builder.prototype.count = function (closure = null) {
   return closureOrPromise(closure, async _ => {
     const { count = 0 } = await this.select({ 'count(*)': 'count' }).group(undefined).findOne()
     return count
   })
 }
 
-Builder.prototype.truncate = function(closure = null) { return DB.sql(`TRUNCATE TABLE ${_quote(this.name)};`, closure) }
-Builder.prototype.one = function(closure = null) { return this.findOne(closure) }
-Builder.prototype.all = function(closure = null) { return this.findAll(closure) }
+Builder.prototype.truncate = function (closure = null) { return DB.sql(`TRUNCATE TABLE ${_quote(this.name)};`, closure) }
+Builder.prototype.one = function (closure = null) { return this.findOne(closure) }
+Builder.prototype.all = function (closure = null) { return this.findAll(closure) }
 
-Builder.prototype.attrs = function(attrs) {
+Builder.prototype.attrs = function (attrs) {
   this.option.attrs = attrs
   return this
 }
 
-Builder.prototype._insertString = function() {
+Builder.prototype._insertString = function () {
   const keys = []
   const vals = []
   const questions = []
@@ -427,7 +435,7 @@ Builder.prototype._insertString = function() {
   return `${strs.join(' ')};`
 }
 
-Builder.prototype._updateString = function() {
+Builder.prototype._updateString = function () {
   const sets = []
   const vals = []
 
@@ -451,7 +459,7 @@ Builder.prototype._updateString = function() {
   return `${strs.join(' ')};`
 }
 
-Builder.prototype._deleteString = function() {
+Builder.prototype._deleteString = function () {
   const strs = ['DELETE'];
   strs.push('FROM')
   strs.push(_quote(this.name))
@@ -462,7 +470,7 @@ Builder.prototype._deleteString = function() {
     this._vals.push(...this.option.where.vals)
   }
 
-  this.option.order  !== undefined && strs.push('ORDER BY ' + this.option.order)
+  this.option.order !== undefined && strs.push('ORDER BY ' + this.option.order)
 
   if (this.option.limit !== undefined && this.option.offset !== undefined) {
     strs.push(`LIMIT ${this.option.offset * 1},${this.option.limit * 1}`)
@@ -475,7 +483,7 @@ Builder.prototype._deleteString = function() {
   return `${strs.join(' ')};`
 }
 
-Builder.prototype._selectString = function() {
+Builder.prototype._selectString = function () {
   const strs = ['SELECT']
 
   strs.push(this.option.select === undefined ? `${_quote(this.name)}.*` : this.option.select)
@@ -489,9 +497,9 @@ Builder.prototype._selectString = function() {
     strs.push(this.option.where.str)
     this._vals.push(...this.option.where.vals)
   }
-  this.option.group  !== undefined && strs.push('GROUP BY ' + this.option.group)
-  this.option.having !== undefined && strs.push('HAVING '   + this.option.having)
-  this.option.order  !== undefined && strs.push('ORDER BY ' + this.option.order)
+  this.option.group !== undefined && strs.push('GROUP BY ' + this.option.group)
+  this.option.having !== undefined && strs.push('HAVING ' + this.option.having)
+  this.option.order !== undefined && strs.push('ORDER BY ' + this.option.order)
 
   if (this.option.limit !== undefined && this.option.offset !== undefined) {
     strs.push(`LIMIT ${this.option.offset * 1},${this.option.limit * 1}`)
@@ -504,7 +512,7 @@ Builder.prototype._selectString = function() {
   return `${strs.join(' ')};`
 }
 
-Builder.prototype.toString = function() {
+Builder.prototype.toString = function () {
   if (this.type == 'select') {
     return this._selectString()
   }

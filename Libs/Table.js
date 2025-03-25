@@ -7,9 +7,9 @@
 
 const { closureOrPromise, Type: T, Json } = require('@oawu/helper')
 
-const DB       = require('./DB.js')
-const Model    = require('./Model.js')
-const Builder  = require('./Builder.js')
+const DB = require('./DB.js')
+const Model = require('./Model.js')
+const Builder = require('./Builder.js')
 const DateTime = require('./DateTime.js')
 
 const _columnFormat = _infos => {
@@ -41,11 +41,11 @@ const _columnFormat = _infos => {
   const val = {
     type,
     infos,
-    field:    row.field,
-    nullable: row.null  === 'YES',
-    primary:  row.key   === 'PRI',
-    auto:     row.extra === 'auto_increment',
-    default:  row.default,
+    field: row.field,
+    nullable: row.null === 'YES',
+    primary: row.key === 'PRI',
+    auto: row.extra === 'auto_increment',
+    default: row.default,
   }
 
   if (type == 'enum') {
@@ -66,7 +66,7 @@ const _columnFormat = _infos => {
   return val
 }
 
-const Table = function(model, closure) {
+const Table = function (model, closure) {
   if (!(this instanceof Table)) {
     return new Table(model, closure)
   }
@@ -93,10 +93,11 @@ const Table = function(model, closure) {
   })
 }
 
-Object.defineProperty(Table.prototype, 'name', { get () {
-  return this.model.table === undefined
-    ? this.model.name
-    : this.model.table
+Object.defineProperty(Table.prototype, 'name', {
+  get() {
+    return this.model.table === undefined
+      ? this.model.name
+      : this.model.table
   }
 })
 
@@ -117,7 +118,7 @@ Table.instance = (model, closure = null) => {
   })))
 }
 
-Table.prototype.attrsToStrings = function(attrs) {
+Table.prototype.attrsToStrings = function (attrs) {
   for (let name in attrs) {
 
     if (this.columns[name] !== undefined && this.columns[name].type == 'json') {
@@ -132,7 +133,7 @@ Table.prototype.attrsToStrings = function(attrs) {
   return attrs;
 }
 
-Table.prototype.insert = function(model, attrs, closure = null) {
+Table.prototype.insert = function (model, attrs, closure = null) {
   attrs = this.attrsToStrings(attrs)
 
   if (!Object.keys(attrs).length) {
@@ -152,7 +153,7 @@ Table.prototype.insert = function(model, attrs, closure = null) {
   })
 }
 
-Table.prototype.update = function(model, attrs, primaries, closure = null) {
+Table.prototype.update = function (model, attrs, primaries, closure = null) {
   attrs = this.attrsToStrings(attrs)
 
   if (!Object.keys(attrs).length) {
@@ -172,7 +173,7 @@ Table.prototype.update = function(model, attrs, primaries, closure = null) {
   })
 }
 
-Table.prototype.delete = function(model, primaries, closure = null) {
+Table.prototype.delete = function (model, primaries, closure = null) {
   const builder = Builder(this.model, 'delete')
 
   for (let key in primaries) {
@@ -185,7 +186,7 @@ Table.prototype.delete = function(model, primaries, closure = null) {
   })
 }
 
-Table.prototype.find = function(builder, closure = null) {
+Table.prototype.find = function (builder, closure = null) {
   return closureOrPromise(closure, async _ => {
     const data = await DB.sql(builder)
     return data.map(row => Model(this, row))

@@ -5,13 +5,13 @@
  * @link        https://www.ioa.tw/
  */
 
-const mysql      = require('mysql')
+const mysql = require('mysql')
 const FileSystem = require('fs/promises')
 
 const { closureOrPromise, Type: T } = require('@oawu/helper')
 
-const Config     = require('./Config.js')
-const DateTime   = require('./DateTime.js')
+const Config = require('./Config.js')
+const DateTime = require('./DateTime.js')
 
 const _logger = (data, startAt, sql, vals) => {
   if (!Config.queryLogDir) {
@@ -20,7 +20,7 @@ const _logger = (data, startAt, sql, vals) => {
 
   const file = `${Config.queryLogDir}${DateTime('date')}.log`
   const text = `${DateTime('time')} │ ${Date.now() - startAt}ms │ ${data instanceof Error ? 'x' : 'v'} │ ${sql} [${vals}]${data instanceof Error ? ` │ ${data.message || data.stack}` : ''}\n`
-  FileSystem.writeFile(file, text, { flag: 'a+', encoding: 'utf8' })
+  FileSystem.writeFile(file, text, { flag: 'a', encoding: 'utf8' })
   return data
 }
 

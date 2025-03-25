@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  up (db) {
+  up(db) {
     const tableA = db.create('TestA', 'Test A')
     const tableB = db.create('TestB', 'Test B')
 
