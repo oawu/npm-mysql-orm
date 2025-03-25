@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const { closureOrPromise, Json, Type: T } = require('@oawu/helper')
+const { promisify, Json, Type: T } = require('@oawu/helper')
 
 const DateTime = require('./DateTime.js')
 
@@ -183,11 +183,11 @@ Model.prototype.insert = function (closure) {
 
 Model.prototype.update = function (closure) {
   if (!Object.keys(this.$.primaries).length) {
-    return closureOrPromise(closure, new Error(`更新資料失敗，錯誤原因：找不到 Primary Key`))
+    return promisify(closure, new Error(`更新資料失敗，錯誤原因：找不到 Primary Key`))
   }
 
   if (!this.$.dirties.length) {
-    return closureOrPromise(closure, this)
+    return promisify(closure, this)
   }
 
   // update_at
@@ -208,7 +208,7 @@ Model.prototype.delete = function (closure) {
     return this.$.table.delete(this, this.$.primaries, closure)
   }
 
-  return closureOrPromise(closure, new Error(`更新資料失敗，錯誤原因：找不到 Primary Key`))
+  return promisify(closure, new Error(`更新資料失敗，錯誤原因：找不到 Primary Key`))
 }
 
 module.exports = Model

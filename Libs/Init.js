@@ -7,7 +7,7 @@
 
 const FileSystem = require('fs/promises')
 
-const { closureOrPromise, Type: T } = require('@oawu/helper')
+const { promisify, Type: T } = require('@oawu/helper')
 
 const Config = require('./Config.js')
 const Model = require('../Model.js')
@@ -69,7 +69,7 @@ const _initModel = async _ => {
   }
 }
 
-module.exports = (closure = null) => closureOrPromise(closure, async _ => {
+module.exports = (closure = null) => promisify(closure, async _ => {
   if (!T.obj(Config.connect)) {
     throw new Error('尚未設定 MySQL Config！')
   }

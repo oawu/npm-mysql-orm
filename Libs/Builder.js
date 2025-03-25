@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const { closureOrPromise, Type: T } = require('@oawu/helper')
+const { promisify, Type: T } = require('@oawu/helper')
 
 const DB = require('./DB.js')
 
@@ -157,7 +157,7 @@ const _find = (builder, closure, isOne) => {
     closure = null
   }
 
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     const Table = require('./Table.js')
     const table = await Table.instance(builder.proto)
     const data = await table.find(builder)
@@ -369,7 +369,7 @@ Builder.prototype.join = function (name, primary, foreign, type = 'INNER') {
 }
 
 Builder.prototype.update = function (_attrs, closure = null) {
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     this.type = 'update'
 
     const Table = require('./Table.js')
@@ -386,7 +386,7 @@ Builder.prototype.update = function (_attrs, closure = null) {
 }
 
 Builder.prototype.delete = function (closure = null) {
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     this.type = 'delete'
 
     const { affectedRows } = await DB.sql(this)
@@ -398,7 +398,7 @@ Builder.prototype.findAll = function (closure = null) { return _find(this, closu
 Builder.prototype.findOne = function (closure = null) { return _find(this, closure, true) }
 
 Builder.prototype.count = function (closure = null) {
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     const { count = 0 } = await this.select({ 'count(*)': 'count' }).group(undefined).findOne()
     return count
   })

@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const { closureOrPromise, Type: T, Json } = require('@oawu/helper')
+const { promisify, Type: T, Json } = require('@oawu/helper')
 
 const DB = require('./DB.js')
 const Model = require('./Model.js')
@@ -105,10 +105,10 @@ const _instances = new Map()
 
 Table.instance = (model, closure = null) => {
   if (_instances.has(model)) {
-    return closureOrPromise(closure, _instances.get(model))
+    return promisify(closure, _instances.get(model))
   }
 
-  return closureOrPromise(closure, new Promise((resolve, reject) => Table(model, data => {
+  return promisify(closure, new Promise((resolve, reject) => Table(model, data => {
     if (T.err(data)) {
       return reject(data)
     }
@@ -137,12 +137,12 @@ Table.prototype.insert = function (model, attrs, closure = null) {
   attrs = this.attrsToStrings(attrs)
 
   if (!Object.keys(attrs).length) {
-    return closureOrPromise(closure, model)
+    return promisify(closure, model)
   }
 
   const builder = Builder(this.model, 'insert').attrs(attrs)
 
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     const data = await DB.sql(builder)
 
     model.id = data.insertId
@@ -157,7 +157,7 @@ Table.prototype.update = function (model, attrs, primaries, closure = null) {
   attrs = this.attrsToStrings(attrs)
 
   if (!Object.keys(attrs).length) {
-    return closureOrPromise(closure, model)
+    return promisify(closure, model)
   }
 
   const builder = Builder(this.model, 'update').attrs(attrs)
@@ -166,7 +166,7 @@ Table.prototype.update = function (model, attrs, primaries, closure = null) {
     builder.where(key, primaries[key])
   }
 
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     await DB.sql(builder)
     model.$.dirties = []
     return model
@@ -180,14 +180,14 @@ Table.prototype.delete = function (model, primaries, closure = null) {
     builder.where(key, primaries[key])
   }
 
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     await DB.sql(builder)
     return model
   })
 }
 
 Table.prototype.find = function (builder, closure = null) {
-  return closureOrPromise(closure, async _ => {
+  return promisify(closure, async _ => {
     const data = await DB.sql(builder)
     return data.map(row => Model(this, row))
   })

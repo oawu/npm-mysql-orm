@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const { closureOrPromise, Type: T } = require('@oawu/helper')
+const { promisify, Type: T } = require('@oawu/helper')
 
 const Builder = require('./Libs/Builder.js')
 const Table = require('./Libs/Table.js')
@@ -60,7 +60,7 @@ const _extend = model => {
       }
     }
 
-    return closureOrPromise(closure, async _ => {
+    return promisify(closure, async _ => {
       const table = await Table.instance(model)
       return await _Model(table, newAttr, true).save()
     })

@@ -8,7 +8,7 @@
 const mysql = require('mysql')
 const FileSystem = require('fs/promises')
 
-const { closureOrPromise, Type: T } = require('@oawu/helper')
+const { promisify, Type: T } = require('@oawu/helper')
 
 const Config = require('./Config.js')
 const DateTime = require('./DateTime.js')
@@ -27,7 +27,7 @@ const _logger = (data, startAt, sql, vals) => {
 let _pool = null
 
 module.exports = {
-  sql: (sql, closure = null) => closureOrPromise(closure, done => {
+  sql: (sql, closure = null) => promisify(closure, done => {
     const startAt = Date.now()
     const sqlStr = `${sql}`.trim()
     const vals = sql.vals || []
@@ -63,7 +63,7 @@ module.exports = {
           : data, startAt, sqlStr, vals.join(', ')))
       }))
   }),
-  close: (closure = null) => closureOrPromise(closure, done => _pool
+  close: (closure = null) => promisify(closure, done => _pool
     ? _pool.end(done)
     : done()),
 }

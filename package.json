@@ -30,9 +30,9 @@
     "npm": ">=9"
   },
   "dependencies": {
-    "@oawu/cli-progress": "^1.0.23",
-    "@oawu/helper": "^2.0.7",
-    "@oawu/xterm": "^1.0.7",
+    "@oawu/cli-progress": "^2.0.0",
+    "@oawu/helper": "^3.0.1",
+    "@oawu/xterm": "^1.0.9",
     "mysql": "^2.18.1"
   },
   "homepage": "https://github.com/oawu/npm-mysql-orm#readme"
