@@ -6,7 +6,7 @@
  */
 
 const mysql = require('mysql')
-const FileSystem = require('fs/promises')
+const fs = require('fs/promises')
 
 const { promisify, Type: T } = require('@oawu/helper')
 
@@ -20,7 +20,7 @@ const _logger = (data, startAt, sql, vals) => {
 
   const file = `${Config.queryLogDir}${DateTime('date')}.log`
   const text = `${DateTime('time')} │ ${Date.now() - startAt}ms │ ${data instanceof Error ? 'x' : 'v'} │ ${sql} [${vals}]${data instanceof Error ? ` │ ${data.message || data.stack}` : ''}\n`
-  FileSystem.writeFile(file, text, { flag: 'a', encoding: 'utf8' })
+  fs.writeFile(file, text, { flag: 'a', encoding: 'utf8' })
   return data
 }
 

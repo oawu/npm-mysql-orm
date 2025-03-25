@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const FileSystem = require('fs/promises')
+const fs = require('fs/promises')
 const Xterm = require('@oawu/xterm')
 const Progress = require('@oawu/cli-progress')
 
@@ -107,7 +107,7 @@ const _versions = async version => {
   const dir = Config.migrationsDir
 
   const migrate = await _migrate()
-  let _migrations = dir !== null ? await tryFunc(FileSystem.readdir(dir), []) : []
+  let _migrations = dir !== null ? await tryFunc(fs.readdir(dir), []) : []
 
   const migrations = _migrations.map(_file => {
     const file = /^(?<version>[0-9]+)\-(?<name>.*)\.js$/ig.exec(_file)

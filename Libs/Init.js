@@ -5,7 +5,7 @@
  * @link        https://www.ioa.tw/
  */
 
-const FileSystem = require('fs/promises')
+const fs = require('fs/promises')
 
 const { promisify, Type: T } = require('@oawu/helper')
 
@@ -15,8 +15,8 @@ const Model = require('../Model.js')
 const _isDir = async (path, mode) => {
   let result = false
   try {
-    await FileSystem.access(path, mode)
-    const stat = await FileSystem.stat(path)
+    await fs.access(path, mode)
+    const stat = await fs.stat(path)
     result = stat.isDirectory()
   } catch (_) {
     result = false
@@ -27,21 +27,21 @@ const _isDir = async (path, mode) => {
 const _initMigrate = async _ => {
   const dir = Config.migrationsDir
 
-  if (!await _isDir(dir, FileSystem.constants.R_OK)) {
+  if (!await _isDir(dir, fs.constants.R_OK)) {
     return Config.migrationsDir = null
   }
 }
 const _initQueryLog = async _ => {
   const dir = Config.queryLogDir
 
-  if (!await _isDir(dir, FileSystem.constants.R_OK | FileSystem.constants.W_OK)) {
+  if (!await _isDir(dir, fs.constants.R_OK | fs.constants.W_OK)) {
     return Config.queryLogDir = null
   }
 }
 
 const _initModel = async _ => {
   const dir = Config.modelsDir
-  if (!await _isDir(dir, FileSystem.constants.R_OK)) {
+  if (!await _isDir(dir, fs.constants.R_OK)) {
     return Config.modelsDir = null
   }
 
@@ -49,7 +49,7 @@ const _initModel = async _ => {
     delete Model[key]
   }
 
-  const _files = await FileSystem.readdir(dir)
+  const _files = await fs.readdir(dir)
   const files = _files.map(_file => {
     const file = /^(?<name>.*)\.js$/ig.exec(_file)
     if (file === null) {
